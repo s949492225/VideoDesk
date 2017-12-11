@@ -1,0 +1,42 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.1.51'
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            def requested = details.requested
+            if (requested.group == 'com.android.support') {
+                if (requested.name.startsWith("appcompat-v7")||requested.name.startsWith("design")) {
+                    //这里指定需要统一的依赖版本,这里统一为26.0.0-alpha1
+                    details.useVersion '27.0.2'
+                }
+            }
+        }
+    }
+
+}
+
+
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
